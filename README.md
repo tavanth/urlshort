@@ -27,3 +27,18 @@ Finally, run the server with:
 npm install
 npm run dev
 ```
+
+## API Usage
+- To shorten a URL, send a POST request to `http://localhost:3000/shorten` with a JSON body containing the long URL:
+```json
+{
+    "longUrl": "https://www.example.com/some/very/long/url"
+}
+```
+- The response will contain the shortened URL:
+```json
+{
+    "message": "Short URL created successfully!",
+    "shortUrl": "http://localhost:3000/abc123"
+}
+```
