@@ -1,1 +1,0 @@
-# Personal project to create a URL shortener using Node.js and Express. The project will allow users to input a long URL and receive a shortened version that redirects to the original URL when accessed.
