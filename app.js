@@ -6,17 +6,21 @@ const rl = readline.createInterface({
 });
 
 async function collectURL() {
-  const longUrl = await rl.question("Enter your long URL: ");
-  const response = await fetch("http://localhost:3000/shorten", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ longUrl: longUrl }),
-  });
-  const data = await response.json();
-  console.log(data);
+  try {
+    const longUrl = await rl.question("Enter your long URL: ");
+    if (!longUrl.startsWith("http")) {
+      throw new Error("Invalid link, please try again");
+    }
+    const response = await fetch("http://localhost:3000/shorten", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ longUrl: longUrl }),
+    });
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.log(error.message);
+  }
   rl.close();
 }
 collectURL();
-// Check if link starts with http (if it does then pass the test, if not do not)
-// WIP
-//  Error Handling & Validating
