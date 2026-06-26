@@ -1,5 +1,4 @@
 const readline = require("readline/promises");
-const { read } = require("node:fs");
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -19,7 +18,7 @@ async function collectURL() {
     const data = await response.json();
     console.log(data);
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
   }
   rl.close();
 }
