@@ -27,27 +27,51 @@ function generateShortUrl() {
 
 app.post("/shorten", async (req, res) => {
   const longUrl = req.body.longUrl;
-  const shortCode = generateShortUrl();
-  await pool.query(
-    "INSERT INTO url_mapping (long_url, short_code) VALUES ($1, $2) RETURNING *",
-    [longUrl, shortCode],
-  );
-  res.json({
-    message: "URL shortened successfully",
-    shortURl: `http://localhost:3000/${shortCode}`,
-  });
+  if (!longUrl || !longUrl.startsWith("http")) {
+    return res.status(400).json({ error: "Invalid URL" });
+  }
+  try {
+    let shortCode;
+    let inserted = false;
+    for (let attempt = 0; attempt < 5; attempt++) {
+      shortCode = generateShortUrl();
+      try {
+        await pool.query(
+          "INSERT INTO url_mapping (long_url, short_code) VALUES ($1, $2) RETURNING *",
+          [longUrl, shortCode],
+        );
+        inserted = true;
+        break;
+      } catch (err) {
+        if (err.code !== "23505") throw err;
+      }
+    }
+    if (!inserted) {
+      return res.status(500).json({ error: "Failed to shorten URL" });
+    }
+    res.json({
+      message: "URL shortened successfully",
+      shortUrl: `http://localhost:3000/${shortCode}`,
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to shorten URL" });
+  }
 });
 
 app.get("/:code", async (req, res) => {
-  const shortCode = req.params.code;
-  const result = await pool.query(
-    "SELECT long_url FROM url_mapping WHERE short_code = $1",
-    [shortCode],
-  );
-  if (result.rows.length > 0) {
-    res.redirect(result.rows[0].long_url);
-  } else {
-    res.status(404).send("URL not found");
+  try {
+    const shortCode = req.params.code;
+    const result = await pool.query(
+      "SELECT long_url FROM url_mapping WHERE short_code = $1",
+      [shortCode],
+    );
+    if (result.rows.length > 0) {
+      res.redirect(result.rows[0].long_url);
+    } else {
+      res.status(404).send("URL not found");
+    }
+  } catch (err) {
+    res.status(500).send("Internal server error");
   }
 });
 
