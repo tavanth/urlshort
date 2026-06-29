@@ -20,6 +20,7 @@ Then, create a `.env` file in the root of your project with the following conten
 ```
 DATABASE_URL=your_postgresql_connection_string
 PORT=your_port_number
+BASE_URL=your_url
 ```
 
 Finally, run the server with:
@@ -29,7 +30,7 @@ npm run dev
 ```
 
 ## API Usage
-- To shorten a URL, simply just run app.js and input your long URL when prompted:
+- To shorten a URL, simply just run app.js and input your long URL when prompted
 - The response will contain the shortened URL:
 ```json
 {
