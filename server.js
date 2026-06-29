@@ -51,7 +51,7 @@ app.post("/shorten", async (req, res) => {
     }
     res.json({
       message: "URL shortened successfully",
-      shortUrl: `http://localhost:3000/${shortCode}`,
+      shortUrl: `${process.env.BASE_URL}${process.env.PORT}/${shortCode}`,
     });
   } catch (err) {
     res.status(500).json({ error: "Failed to shorten URL" });
