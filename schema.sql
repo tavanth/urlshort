@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS url_mapping (
+    id SERIAL PRIMARY KEY,
+    long_url TEXT NOT NULL,
+    short_code TEXT NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
