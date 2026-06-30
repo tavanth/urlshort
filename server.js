@@ -16,7 +16,7 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 pool
-  .connect()
+  .query("SELECT 1")
   .then(() => console.log("connected to database"))
   .catch((err) => console.error("Connection Error", err.stack));
 // Everything above is setting up the Postgres database connection^^
@@ -64,7 +64,7 @@ app.post("/shorten", limiter, async (req, res) => {
     }
     res.json({
       message: "URL shortened successfully",
-      shortUrl: `${process.env.BASE_URL}${process.env.PORT}/${shortCode}`,
+      shortUrl: `${process.env.BASE_URL}/${shortCode}`,
     });
   } catch (err) {
     res.status(500).json({ error: "Failed to shorten URL" });
@@ -88,6 +88,7 @@ app.get("/:code", async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log("Server running");
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server running on ${port}`);
 });
