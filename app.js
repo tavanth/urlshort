@@ -1,3 +1,4 @@
+require("dotenv").config();
 const readline = require("readline/promises");
 const rl = readline.createInterface({
   input: process.stdin,
@@ -11,7 +12,7 @@ async function collectURL() {
     if (!["http:", "https:"].includes(url.protocol)) {
       throw new Error("Invalid link, please try again");
     }
-    const response = await fetch("http://localhost:3000/shorten", {
+    const response = await fetch(`${process.env.BASE_URL}/shorten`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ longUrl: longUrl }),
