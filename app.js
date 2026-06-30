@@ -7,7 +7,8 @@ const rl = readline.createInterface({
 async function collectURL() {
   try {
     const longUrl = await rl.question("Enter your long URL: ");
-    if (!longUrl.startsWith("http")) {
+    const url = new URL(longUrl);
+    if (!["http:", "https:"].includes(url.protocol)) {
       throw new Error("Invalid link, please try again");
     }
     const response = await fetch("http://localhost:3000/shorten", {

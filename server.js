@@ -27,7 +27,12 @@ function generateShortUrl() {
 
 app.post("/shorten", async (req, res) => {
   const longUrl = req.body.longUrl;
-  if (!longUrl || !longUrl.startsWith("http")) {
+  try {
+    const url = new URL(longUrl);
+    if (!["http:", "https:"].includes(url.protocol)) {
+      return res.status(400).json({ error: "Invalid URL" });
+    }
+  } catch {
     return res.status(400).json({ error: "Invalid URL" });
   }
   try {
