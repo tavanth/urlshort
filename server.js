@@ -3,6 +3,14 @@ const app = express();
 app.use(express.json());
 require("dotenv").config();
 const { Pool } = require("pg");
+const rateLimit = require("express-rate-limit");
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -25,7 +33,7 @@ function generateShortUrl() {
   return shortUrl;
 }
 
-app.post("/shorten", async (req, res) => {
+app.post("/shorten", limiter, async (req, res) => {
   const longUrl = req.body.longUrl;
   try {
     const url = new URL(longUrl);
