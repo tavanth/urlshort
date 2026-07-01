@@ -168,11 +168,6 @@ browser       -> GET /:code    -> server.js -> SELECT from url_mapping -> redire
 | `server.js` | Express app, database connection, routes, rate limiter, short-code generation |
 | `app.js` | Interactive CLI client |
 | `schema.sql` | PostgreSQL schema |
-| `improvements.md` | Improvement checklist |
-| `diagram.md` | Request-flow diagram |
-| `project-breakdown.md` | Learning notes/project explanation |
-| `project-guide.md` | Step-by-step build guide |
-| `todo.md` | Older notes |
 
 ## Known limitations
 
