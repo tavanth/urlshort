@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 app.use(express.json());
+const helmet = require("helmet");
+app.use(helmet());
 require("dotenv").config();
 const { Pool } = require("pg");
 const rateLimit = require("express-rate-limit");
